@@ -55,8 +55,9 @@ b、这个记录更新的目标也不在内存中
 1. 判断数据页是否在内存中，若在内存中则直接更新；不在内存中则写入change buffer
 2. 写入redo log
 3. 异步将innodb buffer pool中的change buffer写到磁盘中 system table space(ibdata1)
+ （change buffer内存部分在innodb buffer pool，硬盘部分在system table space（ibdata1））
 4. 异步将内存中应用变更后的数据页，刷到磁盘中
-（change buffer内存部分在innodb buffer pool，硬盘部分在system table space（ibdata1））
+
 
 ### 读的时候，
 先判断内存是否有最新值，如果有，则直接返回。如果没有则将数据页读取到内存中，将change buffer中的变更应用到数据页中，然后读取内存中的最新的数据页。实际读取之后，磁盘上的数据页还是旧的！！！
